@@ -29,13 +29,14 @@ Game.Tile.prototype.getDescription = function() {
 Game.Tile.nullTile = new Game.Tile({description: '(unknown)'});
 Game.Tile.floorTile = new Game.Tile({
     character: '.',
+    foreground: Game.Colours.getC('grey_4'),
     walkable: true,
     blocksLight: false,
     description: 'A cave floor'
 });
 Game.Tile.wallTile = new Game.Tile({
     character: '#',
-    foreground: 'goldenrod',
+    foreground: Game.Colours.getC('grey_4'),
     diggable: true,
     description: 'A cave wall'
 });
@@ -48,7 +49,7 @@ Game.Tile.stairsUpTile = new Game.Tile({
 });
 Game.Tile.stairsDownTile = new Game.Tile({
     character: '>',
-    foreground: 'white',
+    foreground: Game.Colours.getC('grey_4'),
     walkable: true,
     blocksLight: false,
     description: 'A rock staircase leading downwards'

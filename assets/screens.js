@@ -6,16 +6,25 @@ Game.Screen.startScreen = {
     exit: function() { console.log("Exited start screen."); },
     render: function(display) {
         // Render our prompt to the screen
-        display.drawText(1,1, "%c{yellow}Javascript Roguelike");
-        display.drawText(1,2, "Press [Enter] to start!");
+        var y = 0;
+        y++;
+        display.drawText(1, y++, "The  sky  above the port was the color of television, tuned to a dead");
+        display.drawText(1, y++, "channel.");
+        y++;
+        display.drawText(1, y++, "Behind  the  port  lay  the city, factory domes dominated by the vast");
+        display.drawText(1, y++, "cubes  of  corporate  arcologies.  Port  and  city  were divided by a");
+        display.drawText(1, y++, "narrow  borderland  of  older streets, an area with no official name.");
+        display.drawText(1, y++, "Night  City, with Ninsei its heart.");
+        y++;
+        display.drawText(1, y++, "Biz  here  was  a  constant  subliminal  hum,  and death the accepted");
+        display.drawText(1, y++, "punishment  for laziness, carelessness, lack of grace, the failure to");
+        display.drawText(1, y++, "heed the demands of an intricate protocol...");
+        y++;
+        y = display.getOptions().height - 2;
+        display.drawText(1, y++, "%c{#00B8FF}Press any key to start!");
     },
     handleInput: function(inputType, inputData) {
-        // When [Enter] is pressed, go to the play screen
-        if (inputType === 'keydown') {
-            if (inputData.keyCode === ROT.VK_RETURN) {
-                Game.switchScreen(Game.Screen.playScreen);
-            }
-        }
+        Game.switchScreen(Game.Screen.playScreen);
     }
 };
 
@@ -92,6 +101,7 @@ Game.Screen.playScreen = {
         var offsets = this.getScreenOffsets();
         var topLeftX = offsets.x;
         var topLeftY = offsets.y;
+        var unseen_colour = Game.Colours.getC('grey_1');
         // This object will keep track of all visible map cells
         var visibleCells = {};
         // Store this._player.getMap() and player's z to prevent losing it in callbacks
@@ -117,30 +127,54 @@ Game.Screen.playScreen = {
                     // If we are at a cell that is in the field of vision, we need
                     // to check if there are items or entities.
                     if (visibleCells[x + ',' + y]) {
+                        switch(currentDepth) {
+                          case 1:
+                            foreground = Game.Colours.getC('blue_4');
+                            break;
+                          case 2:
+                            foreground = Game.Colours.getC('blue_4');
+                            break;
+                          case 3:
+                            foreground = Game.Colours.getC('orange_4');
+                            break;
+                          case 4:
+                            foreground = Game.Colours.getC('orange_4');
+                            break;
+                          case 5:
+                            foreground = Game.Colours.getC('green_4');
+                            break;
+                          case 6:
+                            foreground = Game.Colours.getC('green_4');
+                            break;
+                          default:
+                            foreground = Game.Colours.getC('grey_4');
+                        }
                         // Check for items first, since we want to draw entities
                         // over items.
                         var items = map.getItemsAt(x, y, currentDepth);
                         // If we have items, we want to render the top most item
                         if (items) {
                             glyph = items[items.length - 1];
+                            // Update the foreground color in case our glyph changed
+                            foreground = glyph.getForeground();
                         }
                         // Check if we have an entity at the position
                         if (map.getEntityAt(x, y, currentDepth)) {
                             glyph = map.getEntityAt(x, y, currentDepth);
+                            // Update the foreground color in case our glyph changed
+                            foreground = glyph.getForeground();
                         }
-                        // Update the foreground color in case our glyph changed
-                        foreground = glyph.getForeground();
                     } else {
-                        // Since the tile was previously explored but is not 
+                        // Since the tile was previously explored but is not
                         // visible, we want to change the foreground color to
                         // dark gray.
-                        foreground = 'darkGray';
+                        foreground = unseen_colour;
                     }
                     display.draw(
                         x - topLeftX,
                         y - topLeftY,
-                        glyph.getChar(), 
-                        foreground, 
+                        glyph.getChar(),
+                        foreground,
                         glyph.getBackground());
                 }
             }
