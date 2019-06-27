@@ -65,14 +65,14 @@ Game.Screen.playScreen = {
         for (var i = 0; i < messages.length; i++) {
             // Draw each message, adding the number of lines
             messageY += display.drawText(
-                0, 
+                0,
                 messageY,
                 '%c{white}%b{black}' + messages[i]
             );
         }
         // Render player stats
         var stats = '%c{white}%b{black}';
-        stats += vsprintf('HP: %d/%d L: %d XP: %d', 
+        stats += vsprintf('HP: %d/%d L: %d XP: %d',
             [this._player.getHp(), this._player.getMaxHp(),
              this._player.getLevel(), this._player.getExperience()]);
         display.drawText(0, screenHeight, stats);
@@ -109,8 +109,8 @@ Game.Screen.playScreen = {
         var currentDepth = this._player.getZ();
         // Find all visible cells and update the object
         map.getFov(currentDepth).compute(
-            this._player.getX(), this._player.getY(), 
-            this._player.getSightRadius(), 
+            this._player.getX(), this._player.getY(),
+            this._player.getSightRadius(),
             function(x, y, radius, visibility) {
                 visibleCells[x + "," + y] = true;
                 // Mark cell as explored
@@ -236,7 +236,7 @@ Game.Screen.playScreen = {
                    'You have nothing to examine.');
                 return;
             } else if (inputData.keyCode === ROT.VK_COMMA) {
-                var items = this._player.getMap().getItemsAt(this._player.getX(), 
+                var items = this._player.getMap().getItemsAt(this._player.getX(),
                     this._player.getY(), this._player.getZ());
                 // If there is only one item, directly pick it up
                 if (items && items.length === 1) {
@@ -249,7 +249,7 @@ Game.Screen.playScreen = {
                 } else {
                     this.showItemsSubScreen(Game.Screen.pickupScreen, items,
                         'There is nothing here to pick up.');
-                } 
+                }
             } else {
                 // Not a valid key
                 return;
@@ -280,7 +280,7 @@ Game.Screen.playScreen = {
             }
             // Unlock the engine
             this._player.getMap().getEngine().unlock();
-        } 
+        }
     },
     move: function(dX, dY, dZ) {
         var newX = this._player.getX() + dX;
@@ -323,7 +323,7 @@ Game.Screen.winScreen = {
         }
     },
     handleInput: function(inputType, inputData) {
-        // Nothing to do here      
+        // Nothing to do here
     }
 };
 
@@ -338,7 +338,7 @@ Game.Screen.loseScreen = {
         }
     },
     handleInput: function(inputType, inputData) {
-        // Nothing to do here      
+        // Nothing to do here
     }
 };
 
@@ -429,8 +429,8 @@ Game.Screen.ItemListScreen.prototype.handleInput = function(inputType, inputData
     if (inputType === 'keydown') {
         // If the user hit escape, hit enter and can't select an item, or hit
         // enter without any items selected, simply cancel out
-        if (inputData.keyCode === ROT.VK_ESCAPE || 
-            (inputData.keyCode === ROT.VK_RETURN && 
+        if (inputData.keyCode === ROT.VK_ESCAPE ||
+            (inputData.keyCode === ROT.VK_RETURN &&
                 (!this._canSelectItem || Object.keys(this._selectedIndices).length === 0))) {
             Game.Screen.playScreen.setSubScreen(undefined);
         // Handle pressing return when items are selected
@@ -577,7 +577,7 @@ Game.Screen.examineScreen = new Game.Screen.ItemListScreen({
         var keys = Object.keys(selectedItems);
         if (keys.length > 0) {
             var item = selectedItems[keys[0]];
-            Game.sendMessage(this._player, "It's %s (%s).", 
+            Game.sendMessage(this._player, "It's %s (%s).",
                 [
                     item.describeA(false),
                     item.details()
@@ -599,13 +599,13 @@ Game.Screen.gainStatScreen = {
 
         // Iterate through each of our options
         for (var i = 0; i < this._options.length; i++) {
-            display.drawText(0, 2 + i, 
+            display.drawText(0, 2 + i,
                 letters.substring(i, i + 1) + ' - ' + this._options[i][0]);
         }
 
         // Render remaining stat points
         display.drawText(0, 4 + this._options.length,
-            "Remaining points: " + this._entity.getStatPoints());   
+            "Remaining points: " + this._entity.getStatPoints());
     },
     handleInput: function(inputType, inputData) {
         if (inputType === 'keydown') {
@@ -659,8 +659,8 @@ Game.Screen.TargetBasedScreen.prototype.setup = function(player, startX, startY,
     // Cache the FOV
     var visibleCells = {};
     this._player.getMap().getFov(this._player.getZ()).compute(
-        this._player.getX(), this._player.getY(), 
-        this._player.getSightRadius(), 
+        this._player.getX(), this._player.getY(),
+        this._player.getSightRadius(),
         function(x, y, radius, visibility) {
             visibleCells[x + "," + y] = true;
         });
@@ -680,7 +680,7 @@ Game.Screen.TargetBasedScreen.prototype.render = function(display) {
     }
 
     // Render the caption at the bottom.
-    display.drawText(0, Game.getScreenHeight() - 1, 
+    display.drawText(0, Game.getScreenHeight() - 1,
         this._captionFunction(this._cursorX + this._offsetX, this._cursorY + this._offsetY));
 };
 
@@ -726,7 +726,7 @@ Game.Screen.lookScreen = new Game.Screen.TargetBasedScreen({
         var map = this._player.getMap();
         // If the tile is explored, we can give a better capton
         if (map.isExplored(x, y, z)) {
-            // If the tile isn't explored, we have to check if we can actually 
+            // If the tile isn't explored, we have to check if we can actually
             // see it before testing if there's an entity or item.
             if (this._visibleCells[x + ',' + y]) {
                 var items = map.getItemsAt(x, y, z);
@@ -767,7 +767,7 @@ Game.Screen.lookScreen = new Game.Screen.TargetBasedScreen({
         var map = this._player.getMap();
         // If the tile is explored, we can give a better capton
         if (map.isExplored(x, y, z)) {
-            // If the tile isn't explored, we have to check if we can actually 
+            // If the tile isn't explored, we have to check if we can actually
             // see it before testing if there's an entity or item.
             if (this._visibleCells[x + ',' + y]) {
                 var items = map.getItemsAt(x, y, z);

@@ -7,7 +7,7 @@ Game.Builder = function(width, height, depth) {
     // Instantiate the arrays to be multi-dimension
     for (var z = 0; z < depth; z++) {
         // Create a new cave at each level
-        this._tiles[z] = this._generateLevel();
+        this._tiles[z] = this._generateLevel(z);
         // Setup the regions array for each depth
         this._regions[z] = new Array(width);
         for (var x = 0; x < width; x++) {
@@ -37,7 +37,7 @@ Game.Builder.prototype.getHeight = function () {
     return this._height;
 };
 
-Game.Builder.prototype._generateLevel = function() {
+Game.Builder.prototype._generateLevel = function(depth) {
     // Create the empty map
     var map = new Array(this._width);
     for (var w = 0; w < this._width; w++) {
@@ -51,6 +51,7 @@ Game.Builder.prototype._generateLevel = function() {
     for (var i = 0; i < totalIterations - 1; i++) {
         generator.create();
     }
+
     // Smoothen it one last time and then update our map
     generator.create(function(x,y,v) {
         if (v === 1) {
@@ -162,7 +163,7 @@ Game.Builder.prototype._findRegionOverlaps = function(z, r1, r2) {
     return matches.randomize();
 };
 
-// This tries to connect two regions by calculating 
+// This tries to connect two regions by calculating
 // where they overlap and adding stairs
 Game.Builder.prototype._connectRegions = function(z, r1, r2) {
     var overlap = this._findRegionOverlaps(z, r1, r2);
@@ -194,7 +195,7 @@ Game.Builder.prototype._connectAllRegions = function() {
                 if (this._tiles[z][x][y] == Game.Tile.floorTile &&
                     this._tiles[z+1][x][y] == Game.Tile.floorTile &&
                     !connected[key]) {
-                    // Since both tiles are floors and we haven't 
+                    // Since both tiles are floors and we haven't
                     // already connected the two regions, try now.
                     this._connectRegions(z, this._regions[z][x][y],
                         this._regions[z+1][x][y]);

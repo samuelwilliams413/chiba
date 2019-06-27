@@ -2,7 +2,7 @@
 Game.PlayerTemplate = {
     name: 'human (you)',
     character: '@',
-    foreground: 'white',
+    foreground: Game.Colours.getC('off_white'),
     maxHp: 40,
     attackValue: 10,
     sightRadius: 6,
@@ -35,7 +35,7 @@ Game.EntityRepository.define('bat', {
     maxHp: 5,
     attackValue: 4,
     speed: 2000,
-    mixins: [Game.EntityMixins.TaskActor, 
+    mixins: [Game.EntityMixins.TaskActor,
              Game.EntityMixins.Attacker, Game.EntityMixins.Destructible,
              Game.EntityMixins.CorpseDropper,
              Game.EntityMixins.ExperienceGainer, Game.EntityMixins.RandomStatGainer]
@@ -68,7 +68,7 @@ Game.EntityRepository.define('kobold', {
 });
 
 Game.EntityRepository.define('giant zombie', {
-    name: 'giant zombie', 
+    name: 'giant zombie',
     character: 'Z',
     foreground: 'teal',
     maxHp: 30,
