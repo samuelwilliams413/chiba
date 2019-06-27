@@ -3,6 +3,7 @@ Game.Tile = function(properties) {
     // Call the Glyph constructor with our properties
     Game.Glyph.call(this, properties);
     // Set up the properties. We use false by default.
+    this._ttype = properties['ttype'] || "generic";
     this._walkable = properties['walkable'] || false;
     this._diggable = properties['diggable'] || false;
     this._blocksLight = (properties['blocksLight'] !== undefined) ?
@@ -37,7 +38,22 @@ Game.Tile.floorTile = new Game.Tile({
 Game.Tile.wallTile = new Game.Tile({
     character: '#',
     foreground: Game.Colours.getC('grey_4'),
+    ttype: "wall",
     diggable: true,
+    description: 'A cave wall'
+});
+Game.Tile.floorTile_o = new Game.Tile({
+    character: '.',
+    foreground: Game.Colours.getC('orange_4'),
+    walkable: true,
+    blocksLight: false,
+    description: 'A cave floor'
+});
+Game.Tile.wallTile_o = new Game.Tile({
+    character: '#',
+    foreground: Game.Colours.getC('orange_4'),
+    ttype: "wall",
+    diggable: false,
     description: 'A cave wall'
 });
 Game.Tile.stairsUpTile = new Game.Tile({

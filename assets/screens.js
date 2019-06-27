@@ -128,26 +128,20 @@ Game.Screen.playScreen = {
                     // to check if there are items or entities.
                     if (visibleCells[x + ',' + y]) {
                         switch(currentDepth) {
-                          case 1:
-                            foreground = Game.Colours.getC('blue_4');
-                            break;
                           case 2:
                             foreground = Game.Colours.getC('blue_4');
                             break;
                           case 3:
-                            foreground = Game.Colours.getC('orange_4');
+                            foreground = Game.Colours.getC('blue_4');
                             break;
                           case 4:
-                            foreground = Game.Colours.getC('orange_4');
+                            foreground = Game.Colours.getC('green_4');
                             break;
                           case 5:
                             foreground = Game.Colours.getC('green_4');
                             break;
-                          case 6:
-                            foreground = Game.Colours.getC('green_4');
-                            break;
                           default:
-                            foreground = Game.Colours.getC('grey_4');
+                            foreground = glyph.getForeground();
                         }
                         // Check for items first, since we want to draw entities
                         // over items.
@@ -170,12 +164,16 @@ Game.Screen.playScreen = {
                         // dark gray.
                         foreground = unseen_colour;
                     }
+                    background = glyph.getBackground()
+                    if (glyph._ttype === "wall") {
+                      background = foreground;
+                    }
                     display.draw(
                         x - topLeftX,
                         y - topLeftY,
                         glyph.getChar(),
                         foreground,
-                        glyph.getBackground());
+                        background);
                 }
             }
         }
