@@ -354,6 +354,8 @@ Game.Screen.ItemListScreen = function(template) {
     this._canSelectMultipleItems = template['canSelectMultipleItems'];
     // Whether a 'no item' option should appear.
     this._hasNoItemOption = template['hasNoItemOption'];
+    
+    this._currentScreen = template['currentScreen'] || 0;
 };
 
 Game.Screen.ItemListScreen.prototype.setup = function(player, items) {
@@ -423,6 +425,73 @@ Game.Screen.ItemListScreen.prototype.executeOkFunction = function() {
         this._player.getMap().getEngine().unlock();
     }
 };
+
+Game.Screen.ItemListScreen.prototype.swapScreens = function(direction) {
+  Game.Screen.playScreen.setSubScreen(null);
+  
+  if (direction == 'right') {
+    switch(this._currentScreen) {
+      case 0:
+        Game.Screen.dropScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.dropScreen);
+        break;
+      case 1:
+        Game.Screen.eatScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.eatScreen);
+        break;
+      case 2:
+        Game.Screen.wieldScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.wieldScreen);
+        break;
+      case 3:
+        Game.Screen.wearScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.wearScreen);
+        break;
+      case 4:
+        Game.Screen.examineScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.examineScreen);
+        break;
+      case 5:
+        Game.Screen.inventoryScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.inventoryScreen);
+        break;
+      default:
+        Game.Screen.inventoryScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.inventoryScreen);
+    }
+  } else {
+    switch(this._currentScreen) {
+      case 2:
+        Game.Screen.dropScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.dropScreen);
+        break;
+      case 3:
+        Game.Screen.eatScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.eatScreen);
+        break;
+      case 4:
+        Game.Screen.wieldScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.wieldScreen);
+        break;
+      case 5:
+        Game.Screen.wearScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.wearScreen);
+        break;
+      case 0:
+        Game.Screen.examineScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.examineScreen);
+        break;
+      case 1:
+        Game.Screen.inventoryScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.inventoryScreen);
+        break;
+      default:
+        Game.Screen.inventoryScreen.setup(this._player, this._player.getItems());
+        Game.Screen.playScreen.setSubScreen(Game.Screen.inventoryScreen);
+    }
+  }
+};
+
 Game.Screen.ItemListScreen.prototype.handleInput = function(inputType, inputData) {
     if (inputType === 'keydown') {
         // If the user hit escape, hit enter and can't select an item, or hit
@@ -434,6 +503,15 @@ Game.Screen.ItemListScreen.prototype.handleInput = function(inputType, inputData
         // Handle pressing return when items are selected
         } else if (inputData.keyCode === ROT.VK_RETURN) {
             this.executeOkFunction();
+            
+        // Handle pressing changing menu
+        } else if (inputData.keyCode === ROT.VK_LEFT) {
+            this.swapScreens('left');
+            
+        // Handle pressing changing menu
+        } else if (inputData.keyCode === ROT.VK_RIGHT) {
+            this.swapScreens('right');
+            
         // Handle pressing zero when 'no item' selection is enabled
         } else if (this._canSelectItem && this._hasNoItemOption && inputData.keyCode === ROT.VK_0) {
             this._selectedIndices = {};
@@ -465,12 +543,13 @@ Game.Screen.ItemListScreen.prototype.handleInput = function(inputType, inputData
 };
 
 Game.Screen.inventoryScreen = new Game.Screen.ItemListScreen({
-    caption: 'Inventory',
+    caption: 'Inventory - [I*****]',
     canSelect: false
 });
 
 Game.Screen.pickupScreen = new Game.Screen.ItemListScreen({
     caption: 'Choose the items you wish to pickup',
+    currentScreen: 0,
     canSelect: true,
     canSelectMultipleItems: true,
     ok: function(selectedItems) {
@@ -484,7 +563,8 @@ Game.Screen.pickupScreen = new Game.Screen.ItemListScreen({
 });
 
 Game.Screen.dropScreen = new Game.Screen.ItemListScreen({
-    caption: 'Choose the item you wish to drop',
+    caption: 'Inventory - [*D****] - Choose the item you wish to drop',
+    currentScreen: 1,
     canSelect: true,
     canSelectMultipleItems: false,
     ok: function(selectedItems) {
@@ -495,7 +575,8 @@ Game.Screen.dropScreen = new Game.Screen.ItemListScreen({
 });
 
 Game.Screen.eatScreen = new Game.Screen.ItemListScreen({
-    caption: 'Choose the item you wish to eat',
+    caption: 'Inventory - [**E***] - Choose the item you wish to eat',
+    currentScreen: 2,
     canSelect: true,
     canSelectMultipleItems: false,
     isAcceptable: function(item) {
@@ -515,7 +596,8 @@ Game.Screen.eatScreen = new Game.Screen.ItemListScreen({
 });
 
 Game.Screen.wieldScreen = new Game.Screen.ItemListScreen({
-    caption: 'Choose the item you wish to wield',
+    caption: 'Inventory - [***W**] - Choose the item you wish to wield',
+    currentScreen: 3,
     canSelect: true,
     canSelectMultipleItems: false,
     hasNoItemOption: true,
@@ -540,7 +622,8 @@ Game.Screen.wieldScreen = new Game.Screen.ItemListScreen({
 });
 
 Game.Screen.wearScreen = new Game.Screen.ItemListScreen({
-    caption: 'Choose the item you wish to wear',
+    caption: 'Inventory - [****W*] - Choose the item you wish to wear',
+    currentScreen: 4,
     canSelect: true,
     canSelectMultipleItems: false,
     hasNoItemOption: true,
@@ -565,7 +648,8 @@ Game.Screen.wearScreen = new Game.Screen.ItemListScreen({
 });
 
 Game.Screen.examineScreen = new Game.Screen.ItemListScreen({
-    caption: 'Choose the item you wish to examine',
+    caption: 'Inventory - [*****E] - Choose the item you wish to examine',
+    currentScreen: 5,
     canSelect: true,
     canSelectMultipleItems: false,
     isAcceptable: function(item) {

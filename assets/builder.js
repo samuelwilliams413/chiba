@@ -44,7 +44,7 @@ Game.Builder.prototype._generateLevel = function(depth) {
         map[w] = new Array(this._height);
     }
     
-    if (depth == 0) {
+    if (depth == 0 || depth == 1) {
       wall=1
       var options = {
           roomWidth: [3, 9],
