@@ -44,7 +44,7 @@ Game.Builder.prototype._generateLevel = function(depth) {
         map[w] = new Array(this._height);
     }
     
-    if (depth == 0 || depth == 1) {
+    if (depth == 5 || depth == 4) {
       wall=1
       var options = {
           roomWidth: [3, 9],
@@ -72,12 +72,12 @@ Game.Builder.prototype._generateLevel = function(depth) {
         v = (v+1)%2
       }
         if (v === 1) {
-            map[x][y] = Game.Tile.floorTile;
+              map[x][y] = Game.Tile.floorTile;
         } else {
             if (wall == 0) {
             map[x][y] = Game.Tile.wallTile;
             } else {
-            map[x][y] = Game.Tile.wallTile_o;
+            map[x][y] = Game.Tile.wallTile_dungeon;
             }
         }
     });

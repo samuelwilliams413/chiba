@@ -15,14 +15,14 @@ Game.Map.BossCavern.prototype._fillCircle = function(tiles, centerX, centerY, ra
     var yChange = 0;
     var radiusError = 0;
 
-    while (x >= y) {    
+    while (x >= y) {
         for (var i = centerX - x; i <= centerX + x; i++) {
             tiles[i][centerY + y] = tile;
             tiles[i][centerY - y] = tile;
         }
         for (var i = centerX - y; i <= centerX + y; i++) {
             tiles[i][centerY + x] = tile;
-            tiles[i][centerY - x] = tile;   
+            tiles[i][centerY - x] = tile;
         }
 
         y++;

@@ -194,13 +194,13 @@ Game.Screen.playScreen = {
         }
         if (inputType === 'keydown') {
             // Movement
-            if (inputData.keyCode === ROT.VK_LEFT) {
+            if (inputData.keyCode === ROT.VK_LEFT || inputData.keyCode === ROT.VK_A) {
                 this.move(-1, 0, 0);
-            } else if (inputData.keyCode === ROT.VK_RIGHT) {
+            } else if (inputData.keyCode === ROT.VK_RIGHT || inputData.keyCode === ROT.VK_D) {
                 this.move(1, 0, 0);
-            } else if (inputData.keyCode === ROT.VK_UP) {
+            } else if (inputData.keyCode === ROT.VK_UP || inputData.keyCode === ROT.VK_W) {
                 this.move(0, -1, 0);
-            } else if (inputData.keyCode === ROT.VK_DOWN) {
+            } else if (inputData.keyCode === ROT.VK_DOWN || inputData.keyCode === ROT.VK_S) {
                 this.move(0, 1, 0);
             } else if (inputData.keyCode === ROT.VK_I) {
                 // Show the inventory screen
@@ -233,8 +233,11 @@ Game.Screen.playScreen = {
                 this.showItemsSubScreen(Game.Screen.examineScreen, this._player.getItems(),
                    'You have nothing to examine.');
                 return;
-            } else if (inputData.keyCode === ROT.VK_COMMA) {
+            } else if (inputData.keyCode === ROT.VK_SPACE) {
+                var acted = false
                 var items = this._player.getMap().getItemsAt(this._player.getX(),
+                    this._player.getY(), this._player.getZ());
+                var tile = this._player.getMap().getTile(this._player.getX(),
                     this._player.getY(), this._player.getZ());
                 // If there is only one item, directly pick it up
                 if (items && items.length === 1) {
@@ -244,10 +247,18 @@ Game.Screen.playScreen = {
                     } else {
                         Game.sendMessage(this._player, "Your inventory is full! Nothing was picked up.");
                     }
+                    acted = true
                 } else {
                     this.showItemsSubScreen(Game.Screen.pickupScreen, items,
-                        'There is nothing here to pick up.');
+                        'There is nothing to interact with.');
                 }
+                if (!acted && tile == Game.Tile.stairsUpTile) {
+                    this.move(0, 0, -1);
+                } else if (!acted && (tile == Game.Tile.stairsDownTile || tile == Game.Tile.holeToCavernTile)) {
+                    this.move(0, 0, 1);
+                }
+                
+                
             } else {
                 // Not a valid key
                 return;
@@ -256,11 +267,7 @@ Game.Screen.playScreen = {
             this._player.getMap().getEngine().unlock();
         } else if (inputType === 'keypress') {
             var keyChar = String.fromCharCode(inputData.charCode);
-            if (keyChar === '>') {
-                this.move(0, 0, 1);
-            } else if (keyChar === '<') {
-                this.move(0, 0, -1);
-            } else if (keyChar === ';') {
+            if (keyChar === ';') {
                 // Setup the look screen.
                 var offsets = this.getScreenOffsets();
                 Game.Screen.lookScreen.setup(this._player,
@@ -895,11 +902,10 @@ Game.Screen.helpScreen = {
         display.drawText(0, y++, 'The villagers have been complaining of a terrible stench coming from the cave.');
         display.drawText(0, y++, 'Find the source of this smell and get rid of it!');
         y += 3;
-        display.drawText(0, y++, '[,] to pick up items');
+        display.drawText(0, y++, '[ ] to interact (pick up items, use stairs)');
         display.drawText(0, y++, '[i] to show inventory');
         display.drawText(0, y++, '    Use arrows to selection inventory action');
         display.drawText(0, y++, '[;] to look around you');
-        display.drawText(0, y++, '[< or >] Go up and down stairs');
         display.drawText(0, y++, '[?] to show this help screen');
         y += 3;
         text = '--- press any key to continue ---';

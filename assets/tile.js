@@ -30,49 +30,63 @@ Game.Tile.prototype.getDescription = function() {
 Game.Tile.nullTile = new Game.Tile({description: '(unknown)'});
 Game.Tile.floorTile = new Game.Tile({
     character: '.',
-    foreground: Game.Colours.getC('grey_4'),
+    foreground: Game.Colours.getC('blue_4'),
     walkable: true,
     blocksLight: false,
     description: 'A cave floor'
 });
 Game.Tile.wallTile = new Game.Tile({
     character: '#',
-    foreground: Game.Colours.getC('grey_4'),
+    foreground: Game.Colours.getC('blue_4'),
     ttype: "wall",
     diggable: true,
     description: 'A cave wall'
 });
-Game.Tile.floorTile_o = new Game.Tile({
+Game.Tile.floorTile_cave = new Game.Tile({
     character: '.',
-    foreground: Game.Colours.getC('orange_4'),
+    foreground: Game.Colours.getC('blue_4'),
     walkable: true,
     blocksLight: false,
     description: 'A cave floor'
 });
-Game.Tile.wallTile_o = new Game.Tile({
+Game.Tile.wallTile_cave = new Game.Tile({
     character: '#',
-    foreground: Game.Colours.getC('orange_4'),
+    foreground: Game.Colours.getC('blue_4'),
+    ttype: "wall",
+    diggable: true,
+    description: 'A cave wall'
+});
+Game.Tile.floorTile_dungeon = new Game.Tile({
+    character: '.',
+    foreground: Game.Colours.getC('grey_4'),
+    walkable: true,
+    blocksLight: false,
+    description: 'A cave floor'
+});
+Game.Tile.wallTile_dungeon = new Game.Tile({
+    character: '#',
+    foreground: Game.Colours.getC('grey_4'),
     ttype: "wall",
     diggable: false,
     description: 'A cave wall'
 });
 Game.Tile.stairsUpTile = new Game.Tile({
     character: '<',
-    foreground: 'white',
+    foreground: Game.Colours.getC('cyber_pink'),
     walkable: true,
     blocksLight: false,
     description: 'A rock staircase leading upwards'
 });
 Game.Tile.stairsDownTile = new Game.Tile({
     character: '>',
-    foreground: Game.Colours.getC('grey_4'),
+    foreground: Game.Colours.getC('cyber_pink'),
     walkable: true,
     blocksLight: false,
     description: 'A rock staircase leading downwards'
 });
 Game.Tile.holeToCavernTile = new Game.Tile({
     character: 'O',
-    foreground: 'white',
+    foreground: Game.Colours.getC('cyber_pink'),
     walkable: true,
     blocksLight: false,
     description: 'A great dark hole in the ground'
