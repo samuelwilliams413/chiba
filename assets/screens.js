@@ -127,22 +127,6 @@ Game.Screen.playScreen = {
                     // If we are at a cell that is in the field of vision, we need
                     // to check if there are items or entities.
                     if (visibleCells[x + ',' + y]) {
-                        switch(currentDepth) {
-                          case 2:
-                            foreground = Game.Colours.getC('blue_4');
-                            break;
-                          case 3:
-                            foreground = Game.Colours.getC('blue_4');
-                            break;
-                          case 4:
-                            foreground = Game.Colours.getC('green_4');
-                            break;
-                          case 5:
-                            foreground = Game.Colours.getC('green_4');
-                            break;
-                          default:
-                            foreground = glyph.getForeground();
-                        }
                         // Check for items first, since we want to draw entities
                         // over items.
                         var items = map.getItemsAt(x, y, currentDepth);
@@ -257,8 +241,6 @@ Game.Screen.playScreen = {
                 } else if (!acted && (tile == Game.Tile.stairsDownTile || tile == Game.Tile.holeToCavernTile)) {
                     this.move(0, 0, 1);
                 }
-                
-                
             } else {
                 // Not a valid key
                 return;
